@@ -1,5 +1,10 @@
 let buttons = document.querySelectorAll(".buttons");
+let win_show = document.querySelector(".win-show")
+let btn_play_again = document.querySelector(".play-again")
+let btn_restart = document.querySelector(".restart")
+let winner = document.querySelector(".winner")
 let playerX = true;
+let all_not_filled = true;
 let Win = [
     [0,1,2],
     [3,4,5],
@@ -27,14 +32,33 @@ buttons.forEach((button) => {
     }
 });
 
+
+function none_wins(){
+    all_not_filled = true;
+    buttons.forEach((button)=>{
+
+        if (button.innerHTML === ""){
+            all_not_filled = false;
+            return all_not_filled
+        }
+    })
+    console.log(all_not_filled)
+    return all_not_filled;
+}
+
 function checkWin(button){
     Win.forEach((list)=>{
         let one = list[0];
         let two = list[1];
         let three = list[2];
-        if (buttons[one].innerHTML !== ""&& buttons[two].innerHTML !== "" && buttons[three].innerHTML !== ""){
+        if (buttons[one].innerHTML !== "" && buttons[two].innerHTML !== "" && buttons[three].innerHTML !== ""){
             if (buttons[one].innerHTML == button.innerHTML && buttons[two].innerHTML == button.innerHTML && buttons[three].innerHTML == button.innerHTML){
-                console.log("win");
+                winner.innerHTML = `Player ${button.innerHTML} Wins!!!`;
+                disable();
+            }else if(none_wins()){
+                console.log("draw")
+                winner.innerHTML = `Its a draw`;
+
                 disable();
             }
         }
@@ -44,5 +68,15 @@ function checkWin(button){
 function disable(){
     buttons.forEach((button)=>{
         button.disabled = true;
+        btn_restart.classList.add("hidden");
+        win_show.classList.remove("hidden");
+    })
+}
+
+btn_play_again.onclick = ()=>{
+    win_show.classList.add("hidden");
+    buttons.forEach((button)=>{
+        button.disabled = false;
+        button.innerHTML = null;
     })
 }
